@@ -33,7 +33,7 @@ Route::post('/employes/{id_employe}/demande-conges', [DemandeCongeController::cl
 Route::get('/employes/{idEmploye}/demande-conges', [DemandeCongeController::class, 'listeDemandeParEmploye']);
 
 // mettre a jour statut
-Route::put('/employes/{id_employe}/demande-conges/{id_demande}', [DemandeCongeController::class, 'mettreAJourStatut']);
+Route::put('/employes/{id_employe}/demande-conges/{id_demande}/manager/{id_manager}', [DemandeCongeController::class, 'mettreAJourStatut']);
 
 // lister des demandes de congé d'un manager pour ses employés uniquement)
 Route::get('/managers/{idManager}/demande-conges', [DemandeCongeController::class, 'listeDemandeParManager']);

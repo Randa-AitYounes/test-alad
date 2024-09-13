@@ -52,12 +52,27 @@ class DemandeConge
             WHERE employes.id_manager = ?', [$id_manager]);
     }
 
-
+    private function trouverEmploye($id_employe)
+    {
+        $sql = "SELECT * FROM employes WHERE id_employe = ?";
+        $employes = DB::select($sql, [$id_employe]);
+        
+       
+        
+        return $employes[0]; // Retourne l
+    }
     
 
     // mise à jour du statut d'une demande
-    public function miseAJourStatut($id_employe, $id_demande, $statut, $commentaireManager = null)
+    public function miseAJourStatut($id_employe, $id_manager, $id_demande, $statut, $commentaireManager = null)
     {
+
+        //vérifier si l'employé appartient au manager
+        $employe = $this->trouverEmploye($id_employe);
+if($employe->id_manager!= $id_manager){
+    throw new Exception("Le manager ne peut pas mettre à jour la demande de congé pour cet employé.");
+}
+
         // verifier si le statut == refusée
         if ($statut === 'Refusée' && empty($commentaireManager)) {
             throw new Exception("Veuillez ajouter un commentaire");

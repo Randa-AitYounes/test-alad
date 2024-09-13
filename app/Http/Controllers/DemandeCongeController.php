@@ -42,7 +42,7 @@ class DemandeCongeController extends Controller
         return response()->json($demande, 200);
     }
 
-    public function mettreAJourStatut(Request $request, $id_employe, $id_demande)
+    public function mettreAJourStatut(Request $request, $id_employe, $id_demande, $id_manager)
     {
         $demandeConge = new DemandeConge();
         
@@ -50,6 +50,7 @@ class DemandeCongeController extends Controller
             $result = $demandeConge->miseAJourStatut(
                 $id_employe,
                 $id_demande,
+                $id_manager,
                 $request->input('statut'),
                 $request->input('commentaire_manager')
             );
