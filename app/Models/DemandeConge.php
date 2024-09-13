@@ -10,13 +10,13 @@ class DemandeConge
 
    
 
-    public function ajouterDemande($idEmploye, $depart, $retour, $commentaire)
+    public function ajouterDemande($id_employe, $depart, $retour, $commentaire)
     {
         // verifier si une demande est créee durant cette periode
         $existing = DB::select("
             SELECT * FROM demande_conges 
             WHERE id_employe = ? AND (depart = ? AND retour = ?)", 
-            [$idEmploye, $retour, $depart]
+            [$id_employe, $retour, $depart]
         );
 
         if (!empty($existing)) {
@@ -27,18 +27,18 @@ class DemandeConge
         DB::insert("
             INSERT INTO demande_conges (id_employe, depart, retour, commentaire, statut)
             VALUES (?, ?, ?, ?, 'En attente')", 
-            [$idEmploye, $depart, $retour, $commentaire]
+            [$id_employe, $depart, $retour, $commentaire]
         );
 
         return "Demande de congé créée avec succès.";
     }
 
     // liste des demandes par employé
-    public function DemandeEmploye($idEmploye)
+    public function DemandeEmploye($id_employe)
     {
         return DB::select("
             SELECT * FROM demande_conges WHERE id_employe = ?", 
-            [$idEmploye]
+            [$id_employe]
         );
     }
 
@@ -52,8 +52,11 @@ class DemandeConge
             WHERE employes.id_manager = ?', [$id_manager]);
     }
 
+
+    
+
     // mise à jour du statut d'une demande
-    public function miseAJourStatut($idDemande, $statut, $commentaireManager = null)
+    public function miseAJourStatut($id_employe, $id_demande, $statut, $commentaireManager = null)
     {
         // verifier si le statut == refusée
         if ($statut === 'Refusée' && empty($commentaireManager)) {
@@ -64,11 +67,11 @@ class DemandeConge
         DB::update("
             UPDATE demande_conges
             SET statut = ?, commentaire_manager = ?
-            WHERE id_demande = ?", 
-            [$statut, $commentaireManager, $idDemande]
+            WHERE id_demande = ? and id_employe = ?", 
+            [$statut, $commentaireManager, $id_demande, $id_employe]
         );
 
-        return "Le statut de la demande a été mis à jour avec succès.";
+        return "Le statut avec (ID: $id_demande) de la demande a été mis à jour avec succès.";
     }
 
    
