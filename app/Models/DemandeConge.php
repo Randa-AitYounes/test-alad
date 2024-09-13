@@ -48,7 +48,7 @@ class DemandeConge
         return DB::select('
             SELECT d_c.* 
             FROM demande_conges d_c 
-            JOIN employes ON employes.id_employe = dc.id_employe 
+            JOIN employes ON employes.id_employe = d_c.id_employe 
             WHERE employes.id_manager = ?', [$id_manager]);
     }
 
